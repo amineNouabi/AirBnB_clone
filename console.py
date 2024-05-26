@@ -2,10 +2,7 @@
 """AirBnB_clone Console Module"""
 
 import cmd
-
-
 import models
-
 from models.amenity import Amenity
 from models.base_model import BaseModel
 from models.city import City
@@ -13,16 +10,13 @@ from models.place import Place
 from models.review import Review
 from models.state import State
 from models.user import User
-
 import json
-
 
 class HBNBCommand(cmd.Cmd):
     """Command Line Interpreter for AirBnB Clone
 
     Attributes:
         prompt (str): command prompt prefix string
-        cmd (Cmd): command line interpreter
         models (dict): dictionary of available models
         parsebale_commands (list): list of commands
                 that are parseable by precmd.
@@ -41,8 +35,11 @@ class HBNBCommand(cmd.Cmd):
     }
 
     parsebale_commands = [
+        "all",
         "destroy",
         "update",
+        "show",
+        "count"
     ]
 
     def precmd(self, arg):
@@ -90,31 +87,53 @@ class HBNBCommand(cmd.Cmd):
             new_instance.save()
             print(new_instance.id)
 
-    def do_show(self, arg):
-        """Prints the string representation of an instance"""
+    def do_count(self, arg):
+        """Retrieves the number of instances of a class"""
         if not arg:
             print("** class name missing **")
-        else:
-            splitted = arg.strip().split()
-            if splitted[0] not in self.models:
-                print("** class doesn't exist **")
-            elif len(splitted) < 2:
-                print("** instance id missing **")
-            else:
-                instance_id = splitted[1]
-                key = "{}.{}".format(splitted[0], instance_id)
-                if key in models.storage.all():
-                    print(models.storage.all()[key])
-                else:
-                    print("** no instance found **")
-
-    def do_all(self, arg):
-        """Prints all string representation of all instances"""
-        if arg not in self.models:
+        elif arg not in self.models:
             print("** class doesn't exist **")
         else:
-            print([str(value) for key, value in models.storage.all().items()
-                   if arg in key])
+            count = 0
+            for key in models.storage.all():
+                if key.startswith(arg + "."):
+                    count += 1
+            print(count)
+
+    def do_show(self, arg):
+        """Prints the string representation of an instance based on class and id"""
+        if not arg:
+            print("** class name missing **")
+            return
+
+        splitted = arg.split()
+        if len(splitted) < 2:
+            print("** instance id missing **")
+            return
+
+        class_name, instance_id = splitted[0], splitted[1].replace("\"", "")
+        if class_name not in self.models:
+            print("** class doesn't exist **")
+            return
+
+        key = "{}.{}".format(class_name, instance_id)
+        obj = models.storage.all().get(key)
+        if obj:
+            print(obj)
+        else:
+            print("** no instance found **")
+
+    def do_all(self, arg):
+        """Prints all instances of a class"""
+        if arg and arg not in self.models:
+            print("** class doesn't exist **")
+            return
+        objects = models.storage.all()
+        obj_list = []
+        for key, value in objects.items():
+            if not arg or key.startswith(arg + "."):
+                obj_list.append(str(value))
+        print(obj_list)
 
     def do_destroy(self, arg):
         """Deletes an instance based on the class name and id"""

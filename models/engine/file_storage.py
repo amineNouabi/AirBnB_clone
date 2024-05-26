@@ -60,3 +60,6 @@ class FileStorage:
             pass
         except Exception as e:
             print(e)
+    def all_by_class(self, cls_name):
+        """Returns all instances of a specific class"""
+        return {key: obj for key, obj in self.__objects.items() if obj.__class__.__name__ == cls_name}
