@@ -73,3 +73,16 @@ The City class represents a city in the system. It has the following attributes:
 The Amenity class represents an amenity in the system. It has the following attributes:
 
 - name: string - the name of the amenity
+
+# Engines
+
+The Engine class is the storage engine for the models. It provides methods for saving, loading, and deleting models from the database.
+
+## FileStorage
+
+The FileStorage class is a concrete implementation of the Engine class that stores models in a JSON file.
+
+- save() - saves the models to a JSON file
+- all() - returns all models in the database
+- new() - adds a new model to the database
+- reload() - reloads the models from the JSON file
