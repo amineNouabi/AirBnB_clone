@@ -1,7 +1,7 @@
 ![img](https://assets.imaginablefutures.com/media/images/ALX_Logo.max-200x150.png)
 > AirBNB clone Console
 
-![hbnb](./hbtn.png)
+![hbnb](./hbnb.png)
 
 ## About
 This is the First Project towards our AirBnB clone project at [ALX](alxafrica.com). Done by [Ahmed Amine NOUABI](https://github.com/amineNouabi) and [Agbo Chiemezie](https://github.com/chiemezie1)
